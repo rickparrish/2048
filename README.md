@@ -17,3 +17,15 @@ on GitHub, this version is a complete rewrite in Pascal for bbs door usage, not 
 So if you find differences, it's probably because I guessed wrong about certain implementation details (some I looked up, 
 like chance of a new tile with value of 4 instead of 2, but most I just guessed based on observations made while playing 
 the original).
+
+<hr />
+
+TODO List<br />
+
+- Make it look nicer (add some colour, etc)
+- Help screen
+- Arrow key support (in RMDoor)
+- InterBBS support (in RMDoor)
+  - Top score from all connected systems
+  - Chat with users from any connected system
+- Personal high score

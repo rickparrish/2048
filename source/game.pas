@@ -10,10 +10,11 @@ implementation
 
 uses
   Door,
-  SysUtils;
+  StrUtils, SysUtils;
 
 var
   _Board: Array[1..4, 1..4] of Integer;
+  _PointsToAdd: Integer;
   _Score: Integer;
 
 procedure DrawTile(X, Y: Integer); forward;
@@ -48,6 +49,7 @@ const
   BottomRight: Char = #217;
   LineLeft: Char = #195;
   LineRight: Char = #180;
+  Shadow: Char = #219;
   TileLeft: Char = #179;
   TileRight: Char = #179;
   TopLeft: Char = #218;
@@ -63,29 +65,39 @@ begin
 
   // TODO Make pretty, also base position of constants instead of hardcoded "magic" values
   DoorGotoXY(25, 3);  DoorWrite(TopLeft + RowLine + #194 + RowLine + #194 + RowLine + #194 + RowLine + TopRight);
-  DoorGotoXY(25, 4);  DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 5);  DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 6);  DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 7);  DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
-  DoorGotoXY(25, 8);  DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 9);  DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 10); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 11); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
-  DoorGotoXY(25, 12); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 13); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 14); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 15); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
-  DoorGotoXY(25, 16); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 17); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 18); DoorWrite(TileLeft + RowTile + TileRight);
-  DoorGotoXY(25, 19); DoorWrite(BottomLeft + RowLine + #193 + RowLine + #193 + RowLine + #193 + RowLine + BottomRight);
+  DoorGotoXY(25, 4);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 5);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 6);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 7);  DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
+  DoorGotoXY(25, 8);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 9);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 10); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 11); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
+  DoorGotoXY(25, 12); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 13); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 14); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 15); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
+  DoorGotoXY(25, 16); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 17); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 18); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
+  DoorGotoXY(25, 19); DoorWrite(BottomLeft + RowLine + #193 + RowLine + #193 + RowLine + #193 + RowLine + BottomRight + Shadow);
+  DoorGotoXY(25, 20); DoorWrite(' ' + StringOfChar(Shadow,  29));
 end;
 
 procedure DrawScore;
 begin
+  if (_PointsToAdd > 0) then
+  begin
+    DoorGotoXY(2, 5);
+    DoorWrite(AddChar(' ', '+' + IntToStr(_PointsToAdd), 6));
+
+    _Score += _PointsToAdd;
+    _PointsToAdd := 0;
+  end;
+
   DoorGotoXY(2, 2); DoorWrite('Score:');
   DoorGotoXY(2, 3); DoorWrite('------');
-  DoorGotoXY(2, 4); DoorWrite(IntToStr(_Score)); // TODO New game needs to erase old score since it may be longer
+  DoorGotoXY(2, 4); DoorWrite(AddChar(' ', IntToStr(_Score), 6));
 end;
 
 procedure DrawScreen;
@@ -148,7 +160,7 @@ function HandleDown: Boolean;
             DrawTile(X, Y);
             DrawTile(X, Y - 1);
 
-            _Score += _Board[Y][X];
+            _PointsToAdd := _Board[Y][X];
 
             Result := true;
 
@@ -227,7 +239,7 @@ function HandleLeft: Boolean;
             DrawTile(X, Y);
             DrawTile(X + 1, Y);
 
-            _Score += _Board[Y][X];
+            _PointsToAdd := _Board[Y][X];
 
             Result := true;
 
@@ -301,7 +313,7 @@ function HandleRight: Boolean;
             DrawTile(X, Y);
             DrawTile(X - 1, Y);
 
-            _Score += _Board[Y][X];
+            _PointsToAdd := _Board[Y][X];
 
             Result := true;
 
@@ -375,7 +387,7 @@ function Combine: Boolean;
             DrawTile(X, Y);
             DrawTile(X, Y + 1);
 
-            _Score += _Board[Y][X];
+            _PointsToAdd := _Board[Y][X];
 
             Result := true;
 
@@ -432,6 +444,7 @@ var
   X, Y: Integer;
 begin
   // Reset score
+  _PointsToAdd := 0;
   _Score := 0;
 
   // Reset board and add start tiles
