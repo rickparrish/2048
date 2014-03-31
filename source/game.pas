@@ -89,15 +89,19 @@ begin
   if (_PointsToAdd > 0) then
   begin
     DoorGotoXY(2, 5);
-    DoorWrite(AddChar(' ', '+' + IntToStr(_PointsToAdd), 6));
+    DoorWrite('|0A' + AddChar(' ', '+' + IntToStr(_PointsToAdd), 6));
 
     _Score += _PointsToAdd;
     _PointsToAdd := 0;
+  end else
+  begin
+    DoorGotoXY(2, 5);
+    DoorWrite(StringOfChar(' ', 6));
   end;
 
-  DoorGotoXY(2, 2); DoorWrite('Score:');
-  DoorGotoXY(2, 3); DoorWrite('------');
-  DoorGotoXY(2, 4); DoorWrite(AddChar(' ', IntToStr(_Score), 6));
+  DoorGotoXY(2, 2); DoorWrite('|0FScore:');
+  DoorGotoXY(2, 3); DoorWrite('|08' + StringOfChar(#196, 6));
+  DoorGotoXY(2, 4); DoorWrite('|0F' + AddChar(' ', IntToStr(_Score), 6) + '|07');
 end;
 
 procedure DrawScreen;
@@ -160,7 +164,7 @@ function HandleDown: Boolean;
             DrawTile(X, Y);
             DrawTile(X, Y - 1);
 
-            _PointsToAdd := _Board[Y][X];
+            _PointsToAdd += _Board[Y][X];
 
             Result := true;
 
@@ -204,6 +208,8 @@ function HandleDown: Boolean;
   end;
 
 begin
+  _PointsToAdd := 0;
+
   Result := Move;
   if (Combine) then
   begin
@@ -239,7 +245,7 @@ function HandleLeft: Boolean;
             DrawTile(X, Y);
             DrawTile(X + 1, Y);
 
-            _PointsToAdd := _Board[Y][X];
+            _PointsToAdd += _Board[Y][X];
 
             Result := true;
 
@@ -283,6 +289,8 @@ function HandleLeft: Boolean;
   end;
 
 begin
+  _PointsToAdd := 0;
+
   Result := Move;
   if (Combine) then
   begin
@@ -313,7 +321,7 @@ function HandleRight: Boolean;
             DrawTile(X, Y);
             DrawTile(X - 1, Y);
 
-            _PointsToAdd := _Board[Y][X];
+            _PointsToAdd += _Board[Y][X];
 
             Result := true;
 
@@ -357,6 +365,8 @@ function HandleRight: Boolean;
   end;
 
 begin
+  _PointsToAdd := 0;
+
   Result := Move;
   if (Combine) then
   begin
@@ -387,7 +397,7 @@ function Combine: Boolean;
             DrawTile(X, Y);
             DrawTile(X, Y + 1);
 
-            _PointsToAdd := _Board[Y][X];
+            _PointsToAdd += _Board[Y][X];
 
             Result := true;
 
@@ -431,6 +441,8 @@ function Combine: Boolean;
   end;
 
 begin
+  _PointsToAdd := 0;
+
   Result := Move;
   if (Combine) then
   begin
