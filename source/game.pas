@@ -12,6 +12,10 @@ uses
   Door,
   StrUtils, SysUtils;
 
+const
+  BOARD_X: Integer = 25;
+  BOARD_Y: Integer = 3;
+
 var
   _Board: Array[1..4, 1..4] of Integer;
   _PointsToAdd: Integer;
@@ -63,25 +67,24 @@ begin
   Temp := StringOfChar(' ', 6);
   RowTile := Temp + #179 + Temp + #179 + Temp + #179 + Temp;
 
-  // TODO Make pretty, also base position of constants instead of hardcoded "magic" values
-  DoorGotoXY(25, 3);  DoorWrite(TopLeft + RowLine + #194 + RowLine + #194 + RowLine + #194 + RowLine + TopRight);
-  DoorGotoXY(25, 4);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 5);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 6);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 7);  DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
-  DoorGotoXY(25, 8);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 9);  DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 10); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 11); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
-  DoorGotoXY(25, 12); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 13); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 14); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 15); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + Shadow);
-  DoorGotoXY(25, 16); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 17); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 18); DoorWrite(TileLeft + RowTile + TileRight + Shadow);
-  DoorGotoXY(25, 19); DoorWrite(BottomLeft + RowLine + #193 + RowLine + #193 + RowLine + #193 + RowLine + BottomRight + Shadow);
-  DoorGotoXY(25, 20); DoorWrite(' ' + StringOfChar(Shadow,  29));
+  DoorGotoXY(BOARD_X, BOARD_Y + 0);  DoorWrite('|07' + TopLeft + RowLine + #194 + RowLine + #194 + RowLine + #194 + RowLine + TopRight);
+  DoorGotoXY(BOARD_X, BOARD_Y + 1);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 2);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 3);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 4);  DoorWrite('|07' + LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 5);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 6);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 7);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 8);  DoorWrite('|07' + LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 9);  DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 10); DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 11); DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 12); DoorWrite('|07' + LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 13); DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 14); DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 15); DoorWrite('|07' + TileLeft + RowTile + TileRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 16); DoorWrite('|07' + BottomLeft + RowLine + #193 + RowLine + #193 + RowLine + #193 + RowLine + BottomRight + '|08' + Shadow);
+  DoorGotoXY(BOARD_X, BOARD_Y + 17); DoorWrite(' |08' + StringOfChar(Shadow,  29) + '|07');
 end;
 
 procedure DrawScore;
@@ -116,14 +119,13 @@ procedure DrawTile(X, Y: Integer);
 var
   S: String;
 begin
-  // TODO Colour, also maybe remove all those "magic" numbers
   S := IntToStr(_Board[Y][X]);
   if (S = '0') then
   begin
     S := '    ';
   end;
-  DoorGotoXY(27 + ((X - 1) * 7) + ((4 - Length(S)) div 2), 5 + ((Y - 1) * 4));
-  DoorWrite(S);
+  DoorGotoXY((BOARD_X + 2) + ((X - 1) * 7) + ((4 - Length(S)) div 2), (BOARD_Y + 2) + ((Y - 1) * 4));
+  DoorWrite('|0F' + S + '|07');
 end;
 
 procedure DrawTiles;
