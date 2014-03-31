@@ -43,26 +43,42 @@ begin
 end;
 
 procedure DrawBoard;
+const
+  BottomLeft: Char = #192;
+  BottomRight: Char = #217;
+  LineLeft: Char = #195;
+  LineRight: Char = #180;
+  TileLeft: Char = #179;
+  TileRight: Char = #179;
+  TopLeft: Char = #218;
+  TopRight: Char = #191;
+var
+  RowLine: String;
+  RowTile: String;
+  Temp: String;
 begin
+  RowLine := StringOfChar(#196, 6);
+  Temp := StringOfChar(' ', 6);
+  RowTile := Temp + #179 + Temp + #179 + Temp + #179 + Temp;
+
   // TODO Make pretty, also base position of constants instead of hardcoded "magic" values
-  DoorGotoXY(25, 3);  DoorWrite('+------+------+------+------+ ');
-  DoorGotoXY(25, 4);  DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 5);  DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 6);  DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 7);  DoorWrite('+------+------+------+------+.');
-  DoorGotoXY(25, 8);  DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 9);  DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 10); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 11); DoorWrite('+------+------+------+------+.');
-  DoorGotoXY(25, 12); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 13); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 14); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 15); DoorWrite('+------+------+------+------+.');
-  DoorGotoXY(25, 16); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 17); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 18); DoorWrite('|      |      |      |      |.');
-  DoorGotoXY(25, 19); DoorWrite('+------+------+------+------+.');
-  DoorGotoXY(25, 20); DoorWrite(' .............................');
+  DoorGotoXY(25, 3);  DoorWrite(TopLeft + RowLine + #194 + RowLine + #194 + RowLine + #194 + RowLine + TopRight);
+  DoorGotoXY(25, 4);  DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 5);  DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 6);  DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 7);  DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
+  DoorGotoXY(25, 8);  DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 9);  DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 10); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 11); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
+  DoorGotoXY(25, 12); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 13); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 14); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 15); DoorWrite(LineLeft + RowLine + #197 + RowLine + #197 + RowLine + #197 + RowLine + LineRight);
+  DoorGotoXY(25, 16); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 17); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 18); DoorWrite(TileLeft + RowTile + TileRight);
+  DoorGotoXY(25, 19); DoorWrite(BottomLeft + RowLine + #193 + RowLine + #193 + RowLine + #193 + RowLine + BottomRight);
 end;
 
 procedure DrawScore;
