@@ -167,8 +167,6 @@ function HandleDown: Boolean;
             _PointsToAdd += _Board[Y][X];
 
             Result := true;
-
-            break;
           end;
         end;
       end;
@@ -248,8 +246,6 @@ function HandleLeft: Boolean;
             _PointsToAdd += _Board[Y][X];
 
             Result := true;
-
-            break;
           end;
         end;
       end;
@@ -324,8 +320,6 @@ function HandleRight: Boolean;
             _PointsToAdd += _Board[Y][X];
 
             Result := true;
-
-            break;
           end;
         end;
       end;
@@ -400,8 +394,6 @@ function Combine: Boolean;
             _PointsToAdd += _Board[Y][X];
 
             Result := true;
-
-            break;
           end;
         end;
       end;
