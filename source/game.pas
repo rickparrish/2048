@@ -130,7 +130,7 @@ function HandleDown: Boolean;
 
   function Combine: Boolean;
   var
-    X, Y, Y2: Integer;
+    X, Y: Integer;
   begin
     Result := false;
 
@@ -140,21 +140,18 @@ function HandleDown: Boolean;
       begin
         if (_Board[Y][X] > 0) then
         begin
-          for Y2 := Y - 1 downto 1 do
+          if (_Board[Y][X] = _Board[Y - 1][X]) then
           begin
-            if (_Board[Y][X] = _Board[Y2][X]) then
-            begin
-              _Score += _Board[Y][X];
-              _Board[Y][X] := _Board[Y][X] * 2;
-              _Board[Y2][X] := 0;
+            _Score += _Board[Y][X];
+            _Board[Y][X] := _Board[Y][X] * 2;
+            _Board[Y - 1][X] := 0;
 
-              DrawTile(X, Y);
-              DrawTile(X, Y2);
+            DrawTile(X, Y);
+            DrawTile(X, Y - 1);
 
-              Result := true;
+            Result := true;
 
-              break;
-            end;
+            break;
           end;
         end;
       end;
@@ -211,7 +208,7 @@ function HandleLeft: Boolean;
 
   function Combine: Boolean;
   var
-    X, X2, Y: Integer;
+    X, Y: Integer;
   begin
     Result := false;
 
@@ -221,21 +218,18 @@ function HandleLeft: Boolean;
       begin
         if (_Board[Y][X] > 0) then
         begin
-          for X2 := X + 1 to 4 do
+          if (_Board[Y][X] = _Board[Y][X + 1]) then
           begin
-            if (_Board[Y][X] = _Board[Y][X2]) then
-            begin
-              _Score += _Board[Y][X];
-              _Board[Y][X] := _Board[Y][X] * 2;
-              _Board[Y][X2] := 0;
+            _Score += _Board[Y][X];
+            _Board[Y][X] := _Board[Y][X] * 2;
+            _Board[Y][X + 1] := 0;
 
-              DrawTile(X, Y);
-              DrawTile(X2, Y);
+            DrawTile(X, Y);
+            DrawTile(X + 1, Y);
 
-              Result := true;
+            Result := true;
 
-              break;
-            end;
+            break;
           end;
         end;
       end;
@@ -287,7 +281,7 @@ function HandleRight: Boolean;
 
   function Combine: Boolean;
   var
-    X, X2, Y: Integer;
+    X, Y: Integer;
   begin
     Result := false;
 
@@ -297,21 +291,18 @@ function HandleRight: Boolean;
       begin
         if (_Board[Y][X] > 0) then
         begin
-          for X2 := X - 1 downto 1 do
+          if (_Board[Y][X] = _Board[Y][X - 1]) then
           begin
-            if (_Board[Y][X] = _Board[Y][X2]) then
-            begin
-              _Score += _Board[Y][X];
-              _Board[Y][X] := _Board[Y][X] * 2;
-              _Board[Y][X2] := 0;
+            _Score += _Board[Y][X];
+            _Board[Y][X] := _Board[Y][X] * 2;
+            _Board[Y][X - 1] := 0;
 
-              DrawTile(X, Y);
-              DrawTile(X2, Y);
+            DrawTile(X, Y);
+            DrawTile(X - 1, Y);
 
-              Result := true;
+            Result := true;
 
-              break;
-            end;
+            break;
           end;
         end;
       end;
@@ -363,7 +354,7 @@ function HandleUp: Boolean;
 
 function Combine: Boolean;
   var
-    X, Y, Y2: Integer;
+    X, Y: Integer;
   begin
     Result := false;
 
@@ -373,21 +364,18 @@ function Combine: Boolean;
       begin
         if (_Board[Y][X] > 0) then
         begin
-          for Y2 := Y + 1 to 4 do
+          if (_Board[Y][X] = _Board[Y + 1][X]) then
           begin
-            if (_Board[Y][X] = _Board[Y2][X]) then
-            begin
-              _Score += _Board[Y][X];
-              _Board[Y][X] := _Board[Y][X] * 2;
-              _Board[Y2][X] := 0;
+            _Score += _Board[Y][X];
+            _Board[Y][X] := _Board[Y][X] * 2;
+            _Board[Y + 1][X] := 0;
 
-              DrawTile(X, Y);
-              DrawTile(X, Y2);
+            DrawTile(X, Y);
+            DrawTile(X, Y + 1);
 
-              Result := true;
+            Result := true;
 
-              break;
-            end;
+            break;
           end;
         end;
       end;
