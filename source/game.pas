@@ -16,6 +16,9 @@ const
   BOARD_X: Integer = 25;
   BOARD_Y: Integer = 3;
 
+type
+  TDirection = (dirDown, dirLeft, dirRight, dirUp);
+
 var
   _Board: Array[1..4, 1..4] of Integer;
   _PointsToAdd: Integer;
@@ -144,38 +147,38 @@ begin
   end;
 end;
 
-function HandleDown: Boolean;
+function HandleDownOrUp(Direction: TDirection): Boolean;
 
-  function Combine: Boolean;
+  function Combine(YStart, YEnd, YOffset: Integer): Integer;
   var
     X, Y: Integer;
   begin
-    Result := false;
+    Result := 0;
 
     for X := 1 to 4 do
     begin
-      for Y := 4 downto 2 do
-      begin
+      Y := YStart + (YOffset * -1); // Init to 1 off our start since we'll add the offset right away
+      repeat
+        Y += YOffset;
+
         if (_Board[Y][X] > 0) then
         begin
-          if (_Board[Y][X] = _Board[Y - 1][X]) then
+          if (_Board[Y][X] = _Board[Y + YOffset][X]) then
           begin
             _Board[Y][X] := _Board[Y][X] * 2;
-            _Board[Y - 1][X] := 0;
+            _Board[Y + YOffset][X] := 0;
 
             DrawTile(X, Y);
-            DrawTile(X, Y - 1);
+            DrawTile(X, Y + YOffset);
 
-            _PointsToAdd += _Board[Y][X];
-
-            Result := true;
+            Result += _Board[Y][X];
           end;
         end;
-      end;
+      until (Y = YEnd);
     end;
   end;
 
-  function Move: Boolean;
+  function Move(YStart, YEnd, YOffset: Integer): Boolean;
   var
     X, Y, Y2: Integer;
   begin
@@ -183,12 +186,19 @@ function HandleDown: Boolean;
 
     for X := 1 to 4 do
     begin
-      for Y := 4 downto 2 do
-      begin
+      Y := YStart + (YOffset * -1); // Init to 1 off our start since we'll add the offset right away
+      repeat
+        Y += YOffset;
+
+        // Look for open spaces
         if (_Board[Y][X] = 0) then
         begin
-          for Y2 := Y - 1 downto 1 do
-          begin
+          Y2 := Y; // Init to Y since we'll add the offset right away
+
+          repeat
+            Y2 += YOffset;
+
+            // Look for a tile to move into the open space
             if (_Board[Y2][X] > 0) then
             begin
               _Board[Y][X] := _Board[Y2][X];
@@ -201,19 +211,35 @@ function HandleDown: Boolean;
 
               break;
             end;
-          end;
+          until (Y2 = (YEnd + YOffset));
         end;
-      end;
+      until (Y = YEnd);
     end;
   end;
 
+var
+  YEnd: Integer;
+  YOffset: Integer;
+  YStart: Integer;
 begin
-  _PointsToAdd := 0;
-
-  Result := Move;
-  if (Combine) then
+  if (Direction = dirDown) then
   begin
-    Move;
+    YEnd := 2;
+    YOffset := -1;
+    YStart := 4;
+  end else
+  if (Direction = dirUp) then
+  begin
+    YEnd := 3;
+    YOffset := +1;
+    YStart := 1;
+  end;
+
+  Result := Move(YStart, YEnd, YOffset);
+  _PointsToAdd := Combine(YStart, YEnd, YOffset);
+  if (_PointsToAdd > 0) then
+  begin
+    Move(YStart, YEnd, YOffset);
     Result := true;
   end;
 end;
@@ -223,38 +249,38 @@ begin
   // TODO
 end;
 
-function HandleLeft: Boolean;
+function HandleLeftOrRight(Direction: TDirection): Boolean;
 
-  function Combine: Boolean;
+  function Combine(XStart, XEnd, XOffset: Integer): Integer;
   var
     X, Y: Integer;
   begin
-    Result := false;
+    Result := 0;
 
     for Y := 1 to 4 do
     begin
-      for X := 1 to 3 do
-      begin
+      X := XStart + (XOffset * -1); // Init to 1 off our start since we'll add the offset right away
+      repeat
+        X += XOffset;
+
         if (_Board[Y][X] > 0) then
         begin
-          if (_Board[Y][X] = _Board[Y][X + 1]) then
+          if (_Board[Y][X] = _Board[Y][X + XOffset]) then
           begin
             _Board[Y][X] := _Board[Y][X] * 2;
-            _Board[Y][X + 1] := 0;
+            _Board[Y][X + XOffset] := 0;
 
             DrawTile(X, Y);
-            DrawTile(X + 1, Y);
+            DrawTile(X + XOffset, Y);
 
-            _PointsToAdd += _Board[Y][X];
-
-            Result := true;
+            Result += _Board[Y][X];
           end;
         end;
-      end;
+      until (X = XEnd);
     end;
   end;
 
-  function Move: Boolean;
+  function Move(XStart, XEnd, XOffset: Integer): Boolean;
   var
     X, X2, Y: Integer;
   begin
@@ -262,12 +288,19 @@ function HandleLeft: Boolean;
 
     for Y := 1 to 4 do
     begin
-      for X := 1 to 3 do
-      begin
+      X := XStart + (XOffset * -1); // Init to 1 off our start since we'll add the offset right away
+      repeat
+        X += XOffset;
+
+        // Look for open spaces
         if (_Board[Y][X] = 0) then
         begin
-          for X2 := X + 1 to 4 do
-          begin
+          X2 := X; // Init to X since we'll add the offset right away
+
+          repeat
+            X2 += XOffset;
+
+            // Look for a tile to move into the open space
             if (_Board[Y][X2] > 0) then
             begin
               _Board[Y][X] := _Board[Y][X2];
@@ -280,167 +313,35 @@ function HandleLeft: Boolean;
 
               break;
             end;
-          end;
+          until (X2 = (XEnd + XOffset));
         end;
-      end;
+      until (X = XEnd);
     end;
   end;
 
+var
+  XEnd: Integer;
+  XOffset: Integer;
+  XStart: Integer;
 begin
-  _PointsToAdd := 0;
-
-  Result := Move;
-  if (Combine) then
+  if (Direction = dirLeft) then
   begin
-    Move;
-    Result := true;
-  end;
-end;
-
-function HandleRight: Boolean;
-
-  function Combine: Boolean;
-  var
-    X, Y: Integer;
+    XEnd := 3;
+    XOffset := +1;
+    XStart := 1;
+  end else
+  if (Direction = dirRight) then
   begin
-    Result := false;
-
-    for Y := 1 to 4 do
-    begin
-      for X := 4 downto 2 do
-      begin
-        if (_Board[Y][X] > 0) then
-        begin
-          if (_Board[Y][X] = _Board[Y][X - 1]) then
-          begin
-            _Board[Y][X] := _Board[Y][X] * 2;
-            _Board[Y][X - 1] := 0;
-
-            DrawTile(X, Y);
-            DrawTile(X - 1, Y);
-
-            _PointsToAdd += _Board[Y][X];
-
-            Result := true;
-          end;
-        end;
-      end;
-    end;
+    XEnd := 2;
+    XOffset := -1;
+    XStart := 4;
   end;
 
-  function Move: Boolean;
-  var
-    X, X2, Y: Integer;
+  Result := Move(XStart, XEnd, XOffset);
+  _PointsToAdd := Combine(XStart, XEnd, XOffset);
+  if (_PointsToAdd > 0) then
   begin
-    Result := false;
-
-    for Y := 1 to 4 do
-    begin
-      for X := 4 downto 2 do
-      begin
-        if (_Board[Y][X] = 0) then
-        begin
-          for X2 := X - 1 downto 1 do
-          begin
-            if (_Board[Y][X2] > 0) then
-            begin
-              _Board[Y][X] := _Board[Y][X2];
-              _Board[Y][X2] := 0;
-
-              DrawTile(X, Y);
-              DrawTile(X2, Y);
-
-              Result := true;
-
-              break;
-            end;
-          end;
-        end;
-      end;
-    end;
-  end;
-
-begin
-  _PointsToAdd := 0;
-
-  Result := Move;
-  if (Combine) then
-  begin
-    Move;
-    Result := true;
-  end;
-end;
-
-function HandleUp: Boolean;
-
-function Combine: Boolean;
-  var
-    X, Y: Integer;
-  begin
-    Result := false;
-
-    for X := 1 to 4 do
-    begin
-      for Y := 1 to 3 do
-      begin
-        if (_Board[Y][X] > 0) then
-        begin
-          if (_Board[Y][X] = _Board[Y + 1][X]) then
-          begin
-            _Board[Y][X] := _Board[Y][X] * 2;
-            _Board[Y + 1][X] := 0;
-
-            DrawTile(X, Y);
-            DrawTile(X, Y + 1);
-
-            _PointsToAdd += _Board[Y][X];
-
-            Result := true;
-          end;
-        end;
-      end;
-    end;
-  end;
-
-  function Move: Boolean;
-  var
-    X, Y, Y2: Integer;
-  begin
-    Result := false;
-
-    for X := 1 to 4 do
-    begin
-      for Y := 1 to 3 do
-      begin
-        if (_Board[Y][X] = 0) then
-        begin
-          for Y2 := Y + 1 to 4 do
-          begin
-            if (_Board[Y2][X] > 0) then
-            begin
-              _Board[Y][X] := _Board[Y2][X];
-              _Board[Y2][X] := 0;
-
-              DrawTile(X, Y);
-              DrawTile(X, Y2);
-
-              Result := true;
-
-              break;
-            end;
-          end;
-        end;
-      end;
-    end;
-  end;
-
-begin
-  _PointsToAdd := 0;
-
-  Result := Move;
-  if (Combine) then
-  begin
-    Move;
+    Move(XStart, XEnd, XOffset);
     Result := true;
   end;
 end;
@@ -480,16 +381,17 @@ begin
     Moved := false;
     DoorGotoXY(1, 1);
 
+    // TODO Handle arrow keys (RMDoor)
     Ch := UpCase(DoorReadKey);
     case Ch of
       'W', 'I', '8':
-        Moved := HandleUp;
+        Moved := HandleDownOrUp(dirUp);
       'A', 'J', '4':
-        Moved := HandleLeft;
+        Moved := HandleLeftOrRight(dirLeft);
       'S', 'K', '2':
-        Moved := HandleDown;
+        Moved := HandleDownOrUp(dirDown);
       'D', 'L', '6':
-        Moved := HandleRight;
+        Moved := HandleLeftOrRight(dirRight);
       'H', '?':
         HandleHelp;
     end;
