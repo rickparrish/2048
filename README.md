@@ -1,8 +1,12 @@
 2048
 ====
 
+![screenshot](https://raw.githubusercontent.com/rickparrish/2048/master/Screenshot.png)
+
 2048 is a single-player bbs door game in which the objective is to slide tiles on a grid to combine them and create a 
-tile with the number 2048
+tile with the number 2048<br />
+<br />
+NOTE: If you run Synchronet, you might want to have a look at <a href="https://github.com/Kirkman/Doubles">Doubles</a>.
 
 <hr />
 
