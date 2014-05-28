@@ -12,7 +12,9 @@ NOTE: If you run Synchronet, you might want to have a look at <a href="https://g
 
 Based on <a href="http://gabrielecirulli.github.io/2048/">2048 by Gabriele Cirulli</a>, 
 which is based on <a href="https://itunes.apple.com/us/app/1024!/id823499224">1024 by Veewo Studio</a>, 
-which are conceptually similar to <a href="http://asherv.com/threes/">Threes by Asher Vollmer</a>.
+which are conceptually similar to <a href="http://asherv.com/threes/">Threes by Asher Vollmer</a>.<br />
+<br />
+ANSI board & tiles are borrowed, with permission, from <a href="https://github.com/Kirkman/Doubles">Doubles</a>.  Thanks Kirkman!
 
 <hr />
 
