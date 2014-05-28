@@ -28,7 +28,6 @@ the original).
 
 TODO List<br />
 
-- Make it look nicer (add some colour, etc)
 - Help screen
 - Arrow key support (in RMDoor)
 - InterBBS support (in RMDoor)
