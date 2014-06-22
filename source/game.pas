@@ -12,10 +12,6 @@ uses
   Door, StringUtils,
   Classes, Crt, StrUtils, SysUtils;
 
-const
-  BOARD_X: Integer = 25;
-  BOARD_Y: Integer = 3;
-
 type
   TDirection = (dirDown, dirLeft, dirRight, dirUp);
 
@@ -32,7 +28,6 @@ procedure DrawTiles; forward;
 
 procedure AddTile;
 var
-  Line: Integer;
   R: Integer;
   Tile: Integer;
   X, Y: Integer;
@@ -102,7 +97,6 @@ end;
 
 procedure DrawTile(X, Y: Integer);
 var
-  Line: Integer;
   Tile: Integer;
 begin
   case _Board[Y][X] of
