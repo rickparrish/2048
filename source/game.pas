@@ -395,17 +395,23 @@ begin
 
     // TODO Handle arrow keys (RMDoor)
     Ch := UpCase(DoorReadKey);
-    case Ch of
-      'W', 'I', '8':
-        Moved := HandleDownOrUp(dirUp);
-      'A', 'J', '4':
-        Moved := HandleLeftOrRight(dirLeft);
-      'S', 'K', '2':
-        Moved := HandleDownOrUp(dirDown);
-      'D', 'L', '6':
-        Moved := HandleLeftOrRight(dirRight);
-      'H', '?':
-        HandleHelp;
+    if (DoorLastKey.Extended) then
+    begin
+      case Ch of
+        'H': Moved := HandleDownOrUp(dirUp);
+        'K': Moved := HandleLeftOrRight(dirLeft);
+        'M': Moved := HandleLeftOrRight(dirRight);
+        'P': Moved := HandleDownOrUp(dirDown);
+      end;
+    end else
+    begin
+      case Ch of
+        'W', 'I', '8': Moved := HandleDownOrUp(dirUp);
+        'A', 'J', '4': Moved := HandleLeftOrRight(dirLeft);
+        'S', 'K', '2': Moved := HandleDownOrUp(dirDown);
+        'D', 'L', '6': Moved := HandleLeftOrRight(dirRight);
+        'H', '?': HandleHelp;
+      end;
     end;
 
     if (Moved) then
