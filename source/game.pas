@@ -64,7 +64,8 @@ procedure DrawBoard;
 begin
   DoorTextBackground(Crt.Blue);
   DoorClrScr;
-  DoorWrite(_AnsiGameBoard);
+//  DoorWrite(_AnsiGameBoard);
+  DoorDisplayFile('ansi\game-board-23x80.ans');
 end;
 
 procedure DrawScore;
